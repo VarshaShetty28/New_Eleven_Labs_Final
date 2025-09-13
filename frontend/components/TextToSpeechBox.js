@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Play, Pause, Download } from "lucide-react";
+import Image from "next/image";
 
 export default function TextToSpeechBox() {
   const [activeTab, setActiveTab] = useState("TEXT TO SPEECH");
@@ -30,23 +31,22 @@ export default function TextToSpeechBox() {
   ];
 
   // Fetch audio from backend when lang changes
-useEffect(() => {
-  const fetchAudio = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/audio/${selectedLang}`
-      );
-      const data = await res.json();
-      setAudioUrl(data.url || null);
-    } catch (error) {
-      console.error("Error fetching audio:", error);
-      setAudioUrl(null);
-    }
-  };
+  useEffect(() => {
+    const fetchAudio = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/audio/${selectedLang}`
+        );
+        const data = await res.json();
+        setAudioUrl(data.url || null);
+      } catch (error) {
+        console.error("Error fetching audio:", error);
+        setAudioUrl(null);
+      }
+    };
 
-  fetchAudio();
-}, [selectedLang]);
-
+    fetchAudio();
+  }, [selectedLang]);
 
   const toggleAudio = () => {
     if (!audioUrl) return alert("No audio available!");
@@ -98,7 +98,7 @@ useEffect(() => {
               <span className="text-purple-600 font-medium">
                 [sarcastically]
               </span>{" "}
-              Not the "burn it all down" kind...{" "}
+              Not the &quot;burn it all down&quot; kind...{" "}
               <span className="text-purple-600 font-medium">[giggles]</span> but
               he was gentle, wise, with eyes like old stars.{" "}
               <span className="text-purple-600 font-medium">[whispers]</span>{" "}
@@ -127,13 +127,15 @@ useEffect(() => {
               {/* Language Dropdown */}
               <div className="relative">
                 <div className="flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1.5 bg-white cursor-pointer">
-                  <img
+                  <Image
                     src={
                       selectedLang === "ENGLISH"
                         ? "https://flagcdn.com/w20/us.png"
                         : "https://flagcdn.com/w20/sa.png"
                     }
                     alt="flag"
+                    width={20}
+                    height={20}
                     className="w-5 h-5 rounded-full object-cover"
                   />
                   <select
