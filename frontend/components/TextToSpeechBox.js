@@ -30,12 +30,23 @@ export default function TextToSpeechBox() {
   ];
 
   // Fetch audio from backend when lang changes
-  useEffect(() => {
-    fetch(`http://127.0.0.1:5000/audio/${selectedLang}`)
-      .then((res) => res.json())
-      .then((data) => setAudioUrl(data.url || null))
-      .catch(() => setAudioUrl(null));
-  }, [selectedLang]);
+useEffect(() => {
+  const fetchAudio = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/audio/${selectedLang}`
+      );
+      const data = await res.json();
+      setAudioUrl(data.url || null);
+    } catch (error) {
+      console.error("Error fetching audio:", error);
+      setAudioUrl(null);
+    }
+  };
+
+  fetchAudio();
+}, [selectedLang]);
+
 
   const toggleAudio = () => {
     if (!audioUrl) return alert("No audio available!");
